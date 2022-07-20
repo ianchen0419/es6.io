@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ES6.io</title>
+    </head>
+    <body>
+        <style>
+            .wrap {
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: sans-serif;
+                font-weight: 100;
+                color: white;
+            }
+
+            .box {
+                background: black
+                    url(https://unsplash.it/1500/1500?image=560&blur=0.5) center
+                    fixed no-repeat;
+                width: 50px;
+                height: 50px;
+                padding: 50px;
+                transition: width 0.2s, height 0.6s;
+                position: relative;
+            }
+
+            .box.opening {
+                width: 500px;
+                height: 500px;
+            }
+
+            .box h2 {
+                position: absolute;
+                width: 100%;
+                font-size: 100px;
+                transform: translateX(-200%);
+                transition: all 0.5s;
+                top: 0;
+            }
+
+            .box p {
+                position: absolute;
+                width: 100%;
+                transform: translateX(200%);
+                transition: all 0.5s;
+                bottom: 0;
+            }
+
+            .box.open > * {
+                transform: translateX(0%);
+            }
+        </style>
+
+        <div class="wrap">
+            <div class="box">
+                <h2>Wes Bos</h2>
+                <p class="social">@wesbos</p>
+            </div>
+        </div>
+
+        <script>
+            const box = document.querySelector('.box');
+
+            // //如果用一班的函式當callback，this可以拿到元素本身
+            box.addEventListener('click', function () {
+                console.log(this); // <div class="box"> ...
+            });
+
+            // 但是使用arrow function，this會拿到window
+            // 因為arrow function的話沒有跟box掛鉤，this會從window繼承，所以addEventListener最好不要用arrow function
+            box.addEventListener('click', () => {
+                console.log(this); // window
+            });
+
+            // setTimeout裡面的this
+            box.addEventListener('click', function () {
+                this.classList.toggle('opening');
+                setTimeout(function () {
+                    // this是window，因為setTimeout裡面的函式沒有跟其他元素掛鉤（可以用var that = this解決）
+                    this.classList.toggle('open');
+                });
+            });
+
+            // 解法：setTimeout裡面使用arrow function
+            // 因為arrow function不會改變this的值（Scope Changing），他只會繼承，因為setTimeout上一層的this指向box元素，所以arrow function的this就拿到了box
+            box.addEventListener('click', function () {
+                this.classList.toggle('opening');
+                setTimeout(() => {
+                    this.classList.toggle('open');
+                }, 500);
+            });
+
+            // 修復關閉時的動態
+            box.addEventListener('click', function () {
+                let first = 'opening';
+                let second = 'open';
+
+                if (this.classList.contains(first)) {
+                    // ES6
+                    [first, second] = [second, first];
+                } else this.classList.toggle(first);
+                setTimeout(() => {
+                    this.classList.toggle(second);
+                }, 500);
+            });
+        </script>
+    </body>
+</html>

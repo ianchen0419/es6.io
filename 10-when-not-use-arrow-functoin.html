@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ES6.io</title>
+    </head>
+    <body>
+        <style>
+            button {
+                font-size: 100px;
+            }
+
+            .on {
+                background: #ffc600;
+            }
+        </style>
+
+        <button id="pushy">Push Me</button>
+
+        <script>
+            // 4個不應該用arrow function的情境
+
+            const button = document.querySelector('#pushy');
+
+            // 1) 如果使用了arrow function，this不會連結到addEventListener這個函式裡面
+            // button.addEventListener('click', () => {
+            //     console.log(this); // window
+            //     this.classList.toggle('on');
+            // });
+
+            // 所以事件綁定要改用一般function比較好
+            button.addEventListener('click', function () {
+                console.log(this); // window
+                this.classList.toggle('on');
+            });
+
+            // 2) 物件裡面的method如果使用了arrow function，this也會變成window
+            // const person = {
+            //     points: 23,
+            //     score: () => {
+            //         console.log(this); // window
+            //         this.points++;
+            //     },
+            // };
+            // person.score(); // still 23
+
+            // 所以物件用一般function比較好（dot function）
+            // const person = {
+            //     points: 23,
+            //     score: function() {
+            //         this.points++;
+            //     }
+            // }
+
+            // 或也可以將method簡寫成這樣，省略function關鍵字
+            const person = {
+                points: 23,
+                score() {
+                    this.points++;
+                },
+            };
+
+            // 3) 當要新增prototype method時
+            class Car {
+                constructor(make, color) {
+                    this.make = make;
+                    this.color = color;
+                }
+            }
+
+            const beemer = new Car('bmw', 'blue');
+            const subie = new Car('Subaru', 'white');
+
+            // 如果用上了arrow function 會悲劇
+            // Car.prototype.summarize = () => {
+            //     console.log(this) // window
+            //     return `This car is a %{this.make} in the color ${this.color}`;
+            // };
+
+            // 所以要改用一般function
+            Car.prototype.summarize = function () {
+                return `This car is a ${this.make} in the color ${this.color}`;
+            };
+
+            subie; // Car {make: 'Subaru', color: 'white'}
+            subie.summarize; // 'This car is a %{this.make} in the color undefined'
+
+            // 4) 當需要用到arguments的時候，因為arrow function沒這個關鍵字
+            // const orderChildren = () => {
+            //     const children = Array.from(arguments);
+            //     return children.map((child, i) => {
+            //         return `${child} was child ${i + 1}`;
+            //     })
+            //     console.log(arguments);
+            // };
+
+            // 所以要改用一般function
+            const orderChildren = function () {
+                const children = Array.from(arguments);
+                return children.map((child, i) => {
+                    return `${child} was child ${i + 1}`;
+                });
+                console.log(arguments);
+            };
+            const result = orderChildren('jill', 'wes', 'jenna');
+            console.log(result); // error
+
+            // const orderChildren = function () {
+            //     const children = Array.from(arguments);
+            //     arguments[0] = 'xxx';
+            //     console.log(arguments);
+            // };
+            // orderChildren(1, 2, 3);
+        </script>
+    </body>
+</html>

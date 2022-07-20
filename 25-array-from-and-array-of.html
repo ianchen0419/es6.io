@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ES6.io</title>
+    </head>
+    <body>
+        <div class="people">
+            <p>Wes</p>
+            <p>Kait</p>
+            <p>Snickers</p>
+        </div>
+    </body>
+    <script>
+        // const ages = [12,23,34];
+        // ages.from() // error
+        // ages.of() // error
+
+        //因為.from跟.of不是寫在Array.prototype上，這兩個method是寫在Array本身上面
+
+        //Array.from()：會接受一個Array-ish的東西，然後轉化他成為一個真正的Array
+
+        const people = document.querySelectorAll('.people p');
+        console.log(people);
+
+        // 因為DOM Collection是NodeList，不是Array，所以無法直接使用.map()
+        // const names = people.map(person => person.textContent) // error;
+
+        // 通常的解法是先讓NodeList變成Array
+        const peopleArray = Array.from(people);
+        const names = peopleArray.map((person) => person.textContent);
+
+        // 更快的做法：Array.from有第二個參數，是一個map function，可以魔改要放進去Array.from的Array-ish元素
+        const newNames = Array.from(people, (person) => {
+            console.log(person);
+            return person.textContent;
+        });
+        console.log(newNames); // ['Wes', 'Kait', 'Snickers']
+
+        // 如果要拿arguments的話
+        function sumAll() {
+            // 因為Argument不是Array，所以不能直接用.reduce()
+            // 要先轉換成Array
+            const nums = Array.from(arguments);
+            console.log(nums);
+
+            return nums.reduce((prev, next) => prev + next, 0); // error: arguments.reduce is not a function
+        }
+        sumAll(2, 34, 23, 234, 234, 234234, 234234, 2342);
+
+        // Array.of則是你可以放進任何東西，他會幫你轉換成Array
+        const ages = Array.of(12, 4, 23, 62, 34);
+        console.log(ages); // [12, 4, 23, 62, 34]
+    </script>
+</html>

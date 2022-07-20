@@ -1,0 +1,32 @@
+{
+  "name": "babel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "babel": "babel app.js --watch --out-file app-compiled.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.18.9",
+    "@babel/plugin-transform-classes": "^7.18.9",
+    "@babel/preset-env": "^7.18.9"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "useBuiltIns": "entry",
+          "corejs": "3.22",
+          "targets": {
+            "chrome": "58",
+            "ie": "11"
+          }
+        }
+      ]
+    ],
+    "plugins": ["@babel/plugin-transform-classes"]
+  }
+}

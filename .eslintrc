@@ -1,0 +1,16 @@
+{
+    "env": {
+        "es6": true,
+        "browser": true
+    },
+    "extends": "airbnb",
+    "rules": {
+        "no-console": "off",
+        "no-unused-vars": "off",
+        "no-unused-let": "off",
+        "no-unused-const": "off",
+        "indent": ["warn", 4],
+        "jsdoc/require-example": 
+    },
+    "plugins": ["jsdoc"]
+}
