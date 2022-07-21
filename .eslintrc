@@ -10,7 +10,7 @@
         "no-unused-let": "off",
         "no-unused-const": "off",
         "indent": ["warn", 4],
-        "jsdoc/require-example": 
+        "jsdoc/require-example": true
     },
     "plugins": ["jsdoc"]
 }
