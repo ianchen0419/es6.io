@@ -32,8 +32,10 @@ const wes = {
 };
 // const twitter = wes.links.social.twitter;
 
+// value assignment
 const { twitter, facebook } = wes.links.social;
 
+// alias assignment
 // 重新命名：原本的名字是twitter，但是因為跟前面的變數名稱重複，所以重新命名，宣告變數成為`tweet`
 const { twitter: tweet, facebook: fb } = wes.links.social;
 
